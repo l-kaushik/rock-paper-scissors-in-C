@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,36 +5,44 @@
 
 void game(int, char *);
 int random(int);
-void checkWin(int, int, int *, int *);
+void checkWin(char *, int, int, int *, int *);
 int player(char *);
 int computer();
 
+// intro / menu
 void main()
 {
     char playerName[51];
-    int len, turn;
+    int len, turn,i=1;
 
-    printf("Enter your name:- ");
-    len = strlen(gets(playerName));
-
-    if (len > 50)
+    while (i != 0)
     {
-        printf("Make sure length of name is under 50 words");
-        exit(0);
+        printf("Enter your name:- ");
+        len = strlen(gets(playerName));
+
+        if (len > 50)
+        {
+            printf("Make sure, the length of your name is under 50 words\n");
+        }
+        else
+        {
+            i = 0;
+        }
     }
     printf("\nWelcome To Rock, Paper & Scissors\n");
     turn = random(2);
     game(turn, playerName);
 }
 
+// the game arena
 void game(int turn, char *playerName)
 {
-    int r1 = 0, r2 = 0,i =0;
+    int r1 = 0, r2 = 0, i = 0;
 
     printf("Instructions:- \n1.Rock\t2.Paper\t3.Scissors\npress the numbers in front of the options\n\n");
 
     if (turn == 1)
-    {   
+    {
         while (i < 3)
         {
 
@@ -44,8 +51,8 @@ void game(int turn, char *playerName)
             playerPoint = player(playerName);
             printf("computer's turn\n");
             compPoint = computer();
-            printf("\nplayer choose:- %d, computer choose:- %d\n", playerPoint, compPoint);
-            checkWin(playerPoint, compPoint, &r1, &r2);
+            printf("\n%s choose:- %d, computer choose:- %d\n", playerName, playerPoint, compPoint);
+            checkWin(playerName, playerPoint, compPoint, &r1, &r2);
             i++;
         }
     }
@@ -59,8 +66,8 @@ void game(int turn, char *playerName)
             compPoint = computer();
             printf("%s's turn:- \n", playerName);
             playerPoint = player(playerName);
-            printf("\nplayer choose:- %d, computer choose:- %d\n", playerPoint, compPoint);
-            checkWin(playerPoint, compPoint, &r1, &r2);
+            printf("\n%s choose:- %d, computer choose:- %d\n", playerName, playerPoint, compPoint);
+            checkWin(playerName, playerPoint, compPoint, &r1, &r2);
             i++;
         }
     }
@@ -79,7 +86,8 @@ void game(int turn, char *playerName)
     }
 }
 
-void checkWin(int p1, int p2, int *r1, int *r2)
+// comparing both turns
+void checkWin(char *playerName, int p1, int p2, int *r1, int *r2)
 {
     int playerPoint = 0, compPoint = 0;
 
@@ -115,37 +123,41 @@ void checkWin(int p1, int p2, int *r1, int *r2)
     // paper vs scissors
     else if (p1 == 2 && p2 == 3)
     {
-        playerPoint += 1;
+        compPoint += 1;
     }
 
     *r1 += playerPoint;
     *r2 += compPoint;
 
-    printf("\nplayer points:- %d, computer points:- %d\n", *r1, *r2);
+    printf("\n%s's point:- %d, computer's point:- %d\n", playerName, *r1, *r2);
     printf("------------------------------------------------\n\n");
 }
 
-int random(int turn)
-{
-    srand(time(NULL));
-    return rand() % turn;
-}
-
+// taking player's input
 int player(char *playerName)
 {
     int playerInput;
     scanf("%d", &playerInput);
 
-    if(playerInput >3 || playerInput <1)
+    if (playerInput > 3 || playerInput < 1)
     {
         printf("Invalid input, try again:- ");
+        fflush(stdin); // clearing the input buffer
         playerInput = player(playerName);
     }
     return playerInput;
 }
 
+// generating computer's input
 int computer()
 {
     int compInput;
-    return random(2) + 1;
+    return random(3) + 1;
+}
+
+// generating random numbers
+int random(int turn)
+{
+    srand(time(NULL));
+    return rand() % turn;
 }
