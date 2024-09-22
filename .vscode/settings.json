@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "dos.h": "c",
+        "windows.h": "c"
+    }
+}
